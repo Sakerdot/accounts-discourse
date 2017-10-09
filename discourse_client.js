@@ -4,7 +4,7 @@ function requestCredential() {
   Reload._onMigrate('discourse', () => [true, { nonce }]);
   Reload._migrate(null, { immediateMigration: true });
 
-  Meteor.call('discourse.getUrl', (err, url) => {
+  Meteor.call('discourse.getUrl', { nonce }, (err, url) => {
     if (!err && url) {
       window.location.replace(url);
     }
@@ -43,7 +43,6 @@ Meteor.startup(() => {
   const nonce = getNonceAfterRedirect();
   if (nonce) {
     const returnQuery = window.location.search.slice(1);
-
     if (!returnQuery) {
       return;
     }

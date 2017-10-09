@@ -17,9 +17,9 @@ Accounts.registerLoginHandler('discourse', (options) => {
     };
   }
 
-  const { nonce, query } = options;
+  const { nonce, returnQuery } = options;
 
-  const parsedQuery = parse(query);
+  const parsedQuery = parse(returnQuery);
 
   check(parsedQuery, {
     sso: String,
