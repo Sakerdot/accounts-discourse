@@ -1,24 +1,19 @@
 Package.describe({
   name: 'accounts-discourse',
   version: '0.0.1',
-  // Brief, one-line summary of the package.
-  summary: '',
+  summary: 'A login service using Discourse SSO as a provider',
   // URL to the Git repository containing the source code for this package.
   git: '',
-  // By default, Meteor will default to using README.md for documentation.
-  // To avoid submitting documentation, set this field to null.
-  documentation: 'README.md'
+  documentation: 'README.md',
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.5.2.2');
-  api.use('ecmascript');
-  api.mainModule('accounts-discourse.js');
-});
+  api.use('ecmascript', ['client', 'server']);
+  api.use('accounts-base', ['client', 'server']);
+  api.use('reload', 'client');
+  api.use('random', 'client');
+  api.use('check', 'server');
 
-Package.onTest(function(api) {
-  api.use('ecmascript');
-  api.use('tinytest');
-  api.use('accounts-discourse');
-  api.mainModule('accounts-discourse-tests.js');
+  api.mainModule('discourse_client.js', 'client');
+  api.mainModule('discourse_server.js', 'server');
 });
