@@ -7,12 +7,13 @@ Accounts.registerLoginHandler('discourse', (options) => {
     returnQuery: String,
   });
 
-  if (!Meteor.settings.discourseSecret) {
+  const config = ServiceConfiguration.configurations.findOne({ service: 'discourse' });
+  if (!config || !config.secret) {
     return {
       type: 'discourse',
       error: new Meteor.Error(
         Accounts.LoginCancelledError.numericError,
-        'Discourse secret SSO key not set on settings',
+        'Discourse not configured or missing secret',
       ),
     };
   }
@@ -28,7 +29,7 @@ Accounts.registerLoginHandler('discourse', (options) => {
 
   const { sso, sig } = parsedQuery;
 
-  const payloadHmac = createHmac('sha256', Meteor.settings.discourseSecret).update(sso).digest('hex');
+  const payloadHmac = createHmac('sha256', config.secret).update(sso).digest('hex');
 
   if (payloadHmac === sig) {
     const payload = parse(Buffer.from(sso, 'base64').toString());
@@ -59,14 +60,9 @@ Meteor.methods({
   'discourse.getUrl': ({ nonce }) => {
     check(nonce, String);
 
-    if (!Meteor.settings.discourseSecret) {
-      throw new Meteor.Error(500, 'Discourse secret SSO key not set on settings');
-    }
-
-    const discourseUrl = Meteor.settings.public.discourseUrl || Meteor.settings.discourseUrl;
-
-    if (!discourseUrl) {
-      throw new Meteor.Error(500, 'Discourse url not set on settings');
+    const config = ServiceConfiguration.configurations.findOne({ service: 'discourse' });
+    if (!config || !config.url || !config.secret) {
+      throw new ServiceConfiguration.ConfigError();
     }
 
     const returnUrl = Meteor.absoluteUrl('discourse/sso/');
@@ -74,8 +70,11 @@ Meteor.methods({
     const payloadBase64 = Buffer.from(`nonce=${nonce}&return_sso_url=${returnUrl}`).toString('base64');
     const payloadURIEncoded = encodeURIComponent(payloadBase64);
 
-    const signature = createHmac('sha256', Meteor.settings.discourseSecret).update(payloadBase64).digest('hex');
+    const signature = createHmac('sha256', config.secret).update(payloadBase64).digest('hex');
 
-    return `${discourseUrl}/session/sso_provider?sso=${payloadURIEncoded}&sig=${signature}`;
+    const discourseUrl = config.url.slice(-1) === '/' ? config.url : `${config.url}/`;
+
+
+    return `${config.url}session/sso_provider?sso=${payloadURIEncoded}&sig=${signature}`;
   },
 });

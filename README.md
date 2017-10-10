@@ -2,17 +2,22 @@
 [Source code of released version](https://github.com/meteor/meteor/tree/master/packages/accounts-facebook)
 ***
 
-## Usage
-A login service using Discourse SSO as a provider (https://meta.discourse.org/t/using-discourse-as-a-sso-provider/32974). Based on Meteor oauth modules.  
-Requires a settings.json such as:
-```json
-{
-    "discourseSecret": "secret key on Discourse SSO admin page",
-    "public": {
-        "discourseUrl": "Url of the Discourse forum (http://discourse.example.com)"
-    }
-}
-```
-You can also define discourseUrl outside public.
+## Summary
+A login service using [Discourse SSO as a provider](https://meta.discourse.org/t/using-discourse-as-a-sso-provider/32974). Based on Meteor oauth modules.
 
-To use just call `Meteor.loginWithDiscourse();`
+## Usage
+Requires a [service](https://docs.meteor.com/api/accounts.html#service-configuration) to be configured like this:
+```javascript
+ServiceConfiguration.configurations.upsert(
+    { service: 'discourse' },
+    {
+        $set: {
+        secret: 'secret',
+        url: 'http://example.discourse.com',
+        },
+    },
+);
+```
+I recommend setting secret and url outside of code, in a settings.json file, read more about it [here](https://docs.meteor.com/api/core.html#Meteor-settings).
+
+To use just call `Meteor.loginWithDiscourse();` on the client.

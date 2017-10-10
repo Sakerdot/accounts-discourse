@@ -1,16 +1,3 @@
-function requestCredential() {
-  const nonce = Random.secret();
-
-  Reload._onMigrate('discourse', () => [true, { nonce }]);
-  Reload._migrate(null, { immediateMigration: true });
-
-  Meteor.call('discourse.getUrl', { nonce }, (err, url) => {
-    if (!err && url) {
-      window.location.replace(url);
-    }
-  });
-}
-
 function convertError(err) {
   if (err && err instanceof Meteor.Error &&
       err.error === Accounts.LoginCancelledError.numericError) {
@@ -28,6 +15,19 @@ function getNonceAfterRedirect() {
   }
 
   return migrationData.nonce;
+}
+
+function requestCredential() {
+  const nonce = Random.secret();
+
+  Reload._onMigrate('discourse', () => [true, { nonce }]);
+  Reload._migrate(null, { immediateMigration: true });
+
+  Meteor.call('discourse.getUrl', { nonce }, (err, url) => {
+    if (!err && url) {
+      window.location.replace(url);
+    }
+  });
 }
 
 if (Meteor.isClient) {
