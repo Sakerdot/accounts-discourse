@@ -7,6 +7,8 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
+  api.versionsFrom('1.4.2');
+
   api.use('ecmascript', ['client', 'server']);
   api.imply('ecmascript', ['client', 'server']);
 
