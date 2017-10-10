@@ -74,7 +74,6 @@ Meteor.methods({
 
     const discourseUrl = config.url.slice(-1) === '/' ? config.url : `${config.url}/`;
 
-
-    return `${config.url}session/sso_provider?sso=${payloadURIEncoded}&sig=${signature}`;
+    return `${discourseUrl}session/sso_provider?sso=${payloadURIEncoded}&sig=${signature}`;
   },
 });
