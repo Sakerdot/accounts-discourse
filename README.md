@@ -14,10 +14,13 @@ ServiceConfiguration.configurations.upsert(
         $set: {
             secret: 'secret',
             url: 'http://example.discourse.com',
+            [onlyLoginMods]: true/false,
+            [onlyLoginAdmins]: true/false,
         },
     },
 );
 ```
+onlyLoginMods and onlyLoginAdmins are optional, will default to false if not given. Both can be set to only login mods and admins.  
 I recommend setting secret and url outside of source code in a settings.json file. Read more about it [here](https://docs.meteor.com/api/core.html#Meteor-settings).  
 Secret won't be exposed to the client.
 

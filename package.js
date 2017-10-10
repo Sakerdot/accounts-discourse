@@ -10,22 +10,15 @@ Package.onUse(function(api) {
   api.versionsFrom('1.4.2');
 
   api.use('ecmascript', ['client', 'server']);
-  api.imply('ecmascript', ['client', 'server']);
-
+  api.use('reload', 'client');
+  api.use('random', 'client');
+  api.use('check', 'server');
+  
   api.use('accounts-base', ['client', 'server']);
   api.imply('accounts-base', ['client', 'server']);
 
-  api.use('reload', 'client');
-  api.imply('reload', 'client');
-
-  api.use('random', 'client');
-  api.imply('random', 'client');
-
-  api.use('check', 'server');
-  api.imply('check', 'server');
-
-  api.use('service-configuration', 'server');
-  api.imply('service-configuration', 'server');
+  api.use('service-configuration', ['client', 'server']);
+  api.imply('service-configuration', ['client', 'server']);
 
   api.mainModule('discourse_client.js', 'client');
   api.mainModule('discourse_server.js', 'server');

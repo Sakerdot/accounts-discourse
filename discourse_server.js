@@ -36,11 +36,38 @@ Accounts.registerLoginHandler('discourse', (options) => {
 
     if (payload.nonce === nonce) {
       const result = {
-        id: payload.external_id,
+        id: Number(payload.external_id),
         username: payload.username,
-        admin: payload.admin,
-        moderator: payload.moderator,
+        admin: payload.admin === 'true',
+        moderator: payload.moderator === 'true',
+        email: payload.email,
       };
+
+      if (config.onlyLoginAdmins && config.onlyLoginMods && !(result.admin || result.moderator)) {
+        return {
+          type: 'discourse',
+          error: new Meteor.Error(
+            Accounts.LoginCancelledError.numericError,
+            'User is neither an admin nor a moderator',
+          ),
+        };
+      } else if (config.onlyLoginAdmins && !config.onlyLoginMods && !result.admin) {
+        return {
+          type: 'discourse',
+          error: new Meteor.Error(
+            Accounts.LoginCancelledError.numericError,
+            'User is not an admin',
+          ),
+        };
+      } else if (config.onlyLoginMods && !config.onlyLoginAdmins && !result.moderator) {
+        return {
+          type: 'discourse',
+          error: new Meteor.Error(
+            Accounts.LoginCancelledError.numericError,
+            'User is not a moderator',
+          ),
+        };
+      }
 
       return Accounts.updateOrCreateUserFromExternalService('discourse', result);
     }
