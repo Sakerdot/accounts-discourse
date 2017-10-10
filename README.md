@@ -5,7 +5,7 @@
 ## Summary
 A login service using [Discourse SSO as a provider](https://meta.discourse.org/t/using-discourse-as-a-sso-provider/32974). Based on Meteor oauth modules.
 
-## Usage
+## Setup and Usage
 Requires a [service](https://docs.meteor.com/api/accounts.html#service-configuration) to be configured like this:
 ```javascript
 ServiceConfiguration.configurations.upsert(
