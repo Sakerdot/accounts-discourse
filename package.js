@@ -1,6 +1,6 @@
 Package.describe({
   name: 'accounts-discourse',
-  version: '0.0.1',
+  version: '1.0.0',
   summary: 'A login service using Discourse SSO as a provider',
   git: 'https://github.com/Sakerdot/accounts-discourse',
   documentation: 'README.md',
