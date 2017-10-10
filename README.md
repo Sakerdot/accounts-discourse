@@ -1,5 +1,5 @@
 # accounts-discourse
-[Source code of released version](https://github.com/meteor/meteor/tree/master/packages/accounts-facebook)
+[Source code of released version](https://github.com/Sakerdot/accounts-discourse)
 ***
 
 ## Summary
