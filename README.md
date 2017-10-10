@@ -18,6 +18,6 @@ ServiceConfiguration.configurations.upsert(
     },
 );
 ```
-I recommend setting secret and url outside of code, in a settings.json file, read more about it [here](https://docs.meteor.com/api/core.html#Meteor-settings).
+I recommend setting secret and url outside of source code in a settings.json file. Read more about it [here](https://docs.meteor.com/api/core.html#Meteor-settings).
 
 To use just call `Meteor.loginWithDiscourse();` on the client.
