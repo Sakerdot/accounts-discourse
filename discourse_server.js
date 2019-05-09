@@ -84,15 +84,14 @@ Accounts.registerLoginHandler('discourse', (options) => {
 
 
 Meteor.methods({
-  'discourse.getUrl': ({ nonce }) => {
+  'discourse.getUrl': ({ nonce, returnUrl }) => {
     check(nonce, String);
+    check(returnUrl, String);
 
     const config = ServiceConfiguration.configurations.findOne({ service: 'discourse' });
     if (!config || !config.url || !config.secret) {
       throw new ServiceConfiguration.ConfigError();
     }
-
-    const returnUrl = Meteor.absoluteUrl('discourse/sso/');
 
     const payloadBase64 = Buffer.from(`nonce=${nonce}&return_sso_url=${returnUrl}`).toString('base64');
     const payloadURIEncoded = encodeURIComponent(payloadBase64);
