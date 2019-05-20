@@ -23,7 +23,9 @@ function requestCredential() {
   Reload._onMigrate('discourse', () => [true, { nonce }]);
   Reload._migrate(null, { immediateMigration: true });
 
-  Meteor.call('discourse.getUrl', { nonce }, (err, url) => {
+  const returnUrl = location.href
+
+  Meteor.call('discourse.getUrl', { nonce, returnUrl }, (err, url) => {
     if (!err && url) {
       window.location.replace(url);
     }
